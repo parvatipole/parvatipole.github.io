@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Tour Konark Temple</title>
+    <style>
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!4v1720539073749!6m8!1m7!1sAo4kPkwF0mf6mJSupaL99g!2m2!1d19.88781794771075!2d86.0947488472479!3f162.49180120658318!4f37.732746112283934!5f0.7820865974627469"
+            width="600"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+    </div>
+    <audio id="audio-guide" src="konark_temple.mp3" autoplay></audio>
+</body>
+</html>

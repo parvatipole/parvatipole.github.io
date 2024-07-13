@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hmapi Virtual Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .iframe-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+        .iframe-container audio {
+            margin-top: 20px;
+        }
+        .exit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hampi Virtual Tour</h1>
+    <div class="button-container">
+        <button onclick="showTour('Shree Vijaya Vithhal Temple')">Shree Vijaya Vithhal Temple</button>
+        <button onclick="showTour('Shree krishna mandir')"> Shree krishna mandir</button>
+        <button onclick="showTour('royal palace')">royal palace</button>
+        <button onclick="showTour('mahanavmi dibba')">mahanavmi dibba</button>
+        <button onclick="showTour('coracle ride(tungbhdra nadi)')">coracle ride(tungbhdra nadi)</button>
+        <button onclick="showTour('ugra narsinha mandir')">ugra narsinha mandir</button>
+        <button onclick="showTour('badviling shivmandir')">badviling shivmandir</button>
+        <button onclick="showTour('underground shivmandir')">underground shivmandir</button>
+        <button onclick="showTour('hajar ram mandir')">hajar ram mandir</button>
+        <button onclick="showTour('virupaksh mandir')">virupaksh mandir</button>
+    </div>
+    <div class="iframe-container" id="tourContainer">
+        <button class="exit-button" onclick="exitTour()">Exit</button>
+        <iframe id="tourFrame"></iframe>
+        <audio controls id="tourAudio">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const tourLinks = {
+            'Shree Vijaya Vithhal Temple': 'https://www.google.com/maps/embed?pb=!4v1720524343849!6m8!1m7!1sg_05_8hKUQEGfphcWS2fLA!2m2!1d15.34214007211682!2d76.47582890487821!3f28.512331026946015!4f4.275394428838609!5f0.7820865974627469',
+            'Shree krishna mandir': 'https://www.google.com/maps/embed?pb=!4v1720524451330!6m8!1m7!1sW76idosgKL8ote-xzaWu9A!2m2!1d15.33019760145736!2d76.46055935491654!3f336.63283431066515!4f-6.43979551617447!5f0.7820865974627469',
+            'royal palace': 'https://www.google.com/maps/embed?pb=!4v1720524646440!6m8!1m7!1s3oQ0g9xg1e2TbEUsc7p9Vw!2m2!1d15.31582948317829!2d76.4705280737744!3f53.45049317878541!4f-1.0693759835111223!5f0.7820865974627469',
+            'mahanavmi dibba': 'https://www.google.com/maps/embed?pb=!4v1720524840079!6m8!1m7!1sOyxjl8lMoGmQlu2Q3ZJK8A!2m2!1d15.31589498999491!2d76.47099305507481!3f314.79810304770365!4f-1.820223758854894!5f0.7820865974627469',
+            'coracle ride(tungbhdra nadi)': 'https://www.google.com/maps/embed?pb=!4v1720526281307!6m8!1m7!1stsyN1zhgbLsregf7H7S9pg!2m2!1d15.33601592828727!2d76.46784169917026!3f11.868113338735771!4f-13.444951721389586!5f0.7820865974627469',
+            'ugra narsinha mandir': 'https://www.google.com/maps/embed?pb=!4v1720526631355!6m8!1m7!1sHrd7TZx6DHdyzHx9XxQ2eg!2m2!1d15.32909636632649!2d76.45904762580545!3f278.42792181880907!4f4.5078125890365754!5f0.7820865974627469',
+            'badviling shivmandir': 'https://www.google.com/maps/embed?pb=!4v1720526735083!6m8!1m7!1sKjEhvAJg8c2ccc208s9qgw!2m2!1d15.32926878513996!2d76.45916651140067!3f269.69712459255425!4f-12.007334300183288!5f0.7820865974627469',
+            'underground shivmandir': 'https://www.google.com/maps/embed?pb=!4v1720526978243!6m8!1m7!1sWHYlY4NhPRUf_a0i7eeh0g!2m2!1d15.31788780705291!2d76.46411824280392!3f165.64381942232887!4f-22.594975336871983!5f0.7820865974627469',
+            'hajar ram mandir': 'https://www.google.com/maps/embed?pb=!4v1720527102618!6m8!1m7!1sUeGIL2q1SpQMiD0Fz-5x-A!2m2!1d15.31773887291836!2d76.4689514583676!3f349.58223545063595!4f-7.51187642603108!5f0.7820865974627469',
+            'virupaksh mandir': 'https://www.google.com/maps/embed?pb=!4v1720527312513!6m8!1m7!1s-vEMwDGtB2nlOAIJfqI3Mw!2m2!1d15.33506363764305!2d76.45872235093225!3f184.49017836191095!4f0!5f0.7820865974627469'
+            
+        };
+
+        const audioFiles = {
+            'Shree Vijaya Vithhal Temple': 'Vithhal_temple.mp3',
+            'Shree krishna mandir': 'krishna_mandir.mp3',
+            'royal palace': 'royal_palace.mp3',
+            'mahanavmi dibba': 'mahanavami_dibba.mp3',
+            'coracle ride(tungbhdra nadi)': 'coracle_ride.mp3',
+            'ugra narsinha mandir': 'ugra_narsimha_hampi.mp3',
+            'badviling shivmandir': 'badviling_shivmandir.mp3',
+            'underground shivmandir': 'underground_shiva_mandir.mp3',
+            'hajar ram mandir': 'hazara_ram_mandir.mp3',
+            'virupaksh mandir': 'virupaksh_mandir.mp3'
+
+        };
+
+        function showTour(place) {
+            const tourContainer = document.getElementById('tourContainer');
+            const tourFrame = document.getElementById('tourFrame');
+            const tourAudio = document.getElementById('tourAudio');
+
+            tourFrame.src = tourLinks[place];
+            tourAudio.src = audioFiles[place];
+            tourContainer.style.display = 'flex';
+        }
+
+        function exitTour() {
+            const tourContainer = document.getElementById('tourContainer');
+            tourContainer.style.display = 'none';
+            
+            const tourFrame = document.getElementById('tourFrame');
+            tourFrame.src = '';
+            
+            const tourAudio = document.getElementById('tourAudio');
+            tourAudio.pause();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ellora and Ajanta Caves Virtual Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .iframe-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+        .iframe-container audio {
+            margin-top: 20px;
+        }
+        .exit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ellora and Ajanta Caves Virtual Tour</h1>
+    <div class="button-container">
+        <button onclick="showTour('ellora cave no. 10')">Ellora Cave No. 10</button>
+        <button onclick="showTour('kailasa temple')">Kailasa Temple (Cave No. 16)</button>
+        <button onclick="showTour('inside kailas mandir')">Inside Kailasa Mandir</button>
+        <button onclick="showTour('jagnath sabha')">Jagnath Sabha</button>
+        <button onclick="showTour('ellora 29')">Ellora Cave No. 29</button>
+        <button onclick="showTour('ajanta caves')">Ajanta Caves</button>
+    </div>
+    <div class="iframe-container" id="tourContainer">
+        <button class="exit-button" onclick="exitTour()">Exit</button>
+        <iframe id="tourFrame"></iframe>
+        <audio controls id="tourAudio">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const tourLinks = {
+            'ellora cave no. 10': 'https://www.google.com/maps/embed?pb=!4v1720812881105!6m8!1m7!1s9JDmY5eB5iyZ6a2UkYez0w!2m2!1d20.0233823999802!2d75.17933856602!3f57.65662699322077!4f-3.2643655084013687!5f0.7820865974627469',
+            'kailasa temple': 'https://www.google.com/maps/embed?pb=!4v1720812982717!6m8!1m7!1s6oViT6yXhtcAAAGu4uHiSw!2m2!1d20.02372596441449!2d75.17904496118751!3f302.11238834160093!4f26.826956752192572!5f0.7820865974627469',
+            'inside kailas mandir': 'https://www.google.com/maps/embed?pb=!4v1720813272946!6m8!1m7!1si3uOsi1i7bkAAAGu4rN4EA!2m2!1d20.02378351707963!2d75.17946051743763!3f107.55879785067745!4f-15.482539915636167!5f0.7820865974627469',
+            'jagnath sabha': 'https://www.google.com/maps/embed?pb=!4v1720813523338!6m8!1m7!1slb8I6Cy5c5sAAAGu4rA89g!2m2!1d20.03297974159871!2d75.17374394137244!3f90.6609712286776!4f4.395043623292125!5f0.7820865974627469',
+            'ellora 29': 'https://www.google.com/maps/embed?pb=!4v1720813607761!6m8!1m7!1sGZ5m6o0uPFzzK2w1na0GVA!2m2!1d20.02868143531188!2d75.17665570715371!3f49.38606461896319!4f10.700074104006063!5f0.7820865974627469',
+            'ajanta caves': 'https://www.google.com/maps/embed?pb=!4v1720813896226!6m8!1m7!1sHCk4dl3QeHLrJ33JzfFtZQ!2m2!1d20.55251884855398!2d75.70207589765059!3f320.5778931577002!4f-22.55984611699344!5f0.7820865974627469'
+        };
+
+        const audioFiles = {
+            'ellora cave no. 10': 'ellora_cave_10.mp3',
+            'kailasa temple': 'kailas_temple_ellora.mp3',
+            'inside kailas mandir': 'inside_kailas_mandir_ellora.mp3',
+            'jagnath sabha': 'jagnath_sabha.mp3',
+            'ellora 29': 'cave_no_29.mp3',
+            'ajanta caves': 'ajanta_caves.mp3'
+        };
+
+        function showTour(place) {
+            const tourContainer = document.getElementById('tourContainer');
+            const tourFrame = document.getElementById('tourFrame');
+            const tourAudio = document.getElementById('tourAudio');
+
+            tourFrame.src = tourLinks[place];
+            tourAudio.src = audioFiles[place];
+            tourContainer.style.display = 'flex';
+        }
+
+        function exitTour() {
+            const tourContainer = document.getElementById('tourContainer');
+            tourContainer.style.display = 'none';
+            
+            const tourFrame = document.getElementById('tourFrame');
+            tourFrame.src = '';
+            
+            const tourAudio = document.getElementById('tourAudio');
+            tourAudio.pause();
+        }
+    </script>
+</body>
+</html>

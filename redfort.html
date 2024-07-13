@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agra Fort Virtual Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .iframe-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+        .iframe-container audio {
+            margin-top: 20px;
+        }
+        .exit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Agra Fort Virtual Tour</h1>
+    <div class="button-container">
+        <button onclick="showTour('roshanara-mahal')">Roshanara Mahal</button>
+        <button onclick="showTour('khas-mahal')">Khas Mahal</button>
+        <button onclick="showTour('shish-mahal')">Shish Mahal</button>
+        <button onclick="showTour('jahanara-mahal')">Jahanara Mahal</button>
+        <button onclick="showTour('jasmin-tower')">Jasmin Tower</button>
+        <button onclick="showTour('shahjahan-mumtaj-mahal')">Shahjahan-Mumtaj Mahal</button>
+        <button onclick="showTour('diwanekhas-and-diwan-e-aam')">Diwan-e-Khas and Diwan-e-Aam</button>
+        <button onclick="showTour('pearl-mosque')">Pearl Mosque</button>
+        <button onclick="showTour('whole-agra-fort')">Whole Agra Fort</button>
+    </div>
+    <div class="iframe-container" id="tourContainer">
+        <button class="exit-button" onclick="exitTour()">Exit</button>
+        <iframe id="tourFrame"></iframe>
+        <audio controls id="tourAudio">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const tourLinks = {
+            'roshanara-mahal': 'https://www.google.com/maps/embed?pb=!4v1720432494019!6m8!1m7!1sHRPU0ujWXoK_hLygwH1QYg!2m2!1d27.1782938681345!2d78.02359129422291!3f91.66202130541166!4f-22.7748958888574!5f0.7820865974627469',
+            'khas-mahal': 'https://www.google.com/maps/embed?pb=!4v1720432601103!6m8!1m7!1sCAoSLEFGMVFpcE1ReDJzcFhIc3MxYW5zQ2tiT29hX0dpNzh0aHB0WXhBYjRJcTlj!2m2!1d27.17881166640901!2d78.02315222393489!3f355.8668349723391!4f-8.83807793933238!5f0.7820865974627469',
+            'shish-mahal': 'https://www.google.com/maps/embed?pb=!4v1720432754648!6m8!1m7!1sOLm1in1-veVWFFUG4D2zMg!2m2!1d27.1784966498735!2d78.02343700474756!3f323.1622277176093!4f6.823065316216258!5f0.7820865974627469',
+            'jahanara-mahal': 'https://www.google.com/maps/embed?pb=!4v1720432857422!6m8!1m7!1sd_dB3APuHQ6WcOzwOOkraw!2m2!1d27.17884568182419!2d78.02346832153978!3f38.39005542965667!4f9.450331781407954!5f0.7820865974627469',
+            'jasmin-tower': 'https://www.google.com/maps/embed?pb=!4v1720432968435!6m8!1m7!1sB3KyPZW3ZLC0soQegFzKCA!2m2!1d27.17781580567716!2d78.02320288911051!3f256.1163314478202!4f6.2857219259300905!5f0.7820865974627469',
+            'shahjahan-mumtaj-mahal': 'https://www.google.com/maps/embed?pb=!4v1720433135832!6m8!1m7!1sbAmNMJe13mPMEEJraeaC8A!2m2!1d27.17797104869823!2d78.02359421694052!3f276.93589251200575!4f-10.563770814510093!5f0.7820865974627469',
+            'diwanekhas-and-diwan-e-aam': 'https://www.google.com/maps/embed?pb=!4v1720433234999!6m8!1m7!1srUGhe79ZRJVS-0cPYnatpA!2m2!1d27.17890455564811!2d78.02245595270335!3f90.35008074297183!4f14.827682287069265!5f0.7820865974627469',
+            'pearl-mosque': 'https://www.google.com/maps/embed?pb=!4v1720433423397!6m8!1m7!1sgXVIVaH5erD6PlpZwxAPSg!2m2!1d27.1793747120571!2d78.02259583175965!3f336.01529920510905!4f-15.296501286494305!5f0.7820865974627469',
+            'whole-agra-fort': 'https://www.google.com/maps/embed?pb=!4v1720433771984!6m8!1m7!1sahUvD-6YA8G2LoBTVQ9jNQ!2m2!1d27.17769218459425!2d78.0225461980927!3f346.70151749881916!4f-5.701319693187941!5f0.7820865974627469'
+        };
+
+        const audioFiles = {
+            'roshanara-mahal': 'ShahjahansDaughters_palace.mp3',
+            'khas-mahal': 'KhasMahal.mp3',
+            'shish-mahal': 'KhasMahal.mp3',
+            'jahanara-mahal': 'jahanara_palace.mp3',
+            'jasmin-tower': 'jasmine_tower.mp3',
+            'shahjahan-mumtaj-mahal': 'KhasMahal.mp3',
+            'diwanekhas-and-diwan-e-aam': 'diwan-e-aam.mp3',
+            'pearl-mosque': 'pearl_mosque.mp3',
+            'whole-agra-fort': 'redfort_outsideview.mp3'
+        };
+
+        function showTour(place) {
+            const tourContainer = document.getElementById('tourContainer');
+            const tourFrame = document.getElementById('tourFrame');
+            const tourAudio = document.getElementById('tourAudio');
+
+            tourFrame.src = tourLinks[place];
+            tourAudio.src = audioFiles[place];
+            tourContainer.style.display = 'flex';
+        }
+
+        function exitTour() {
+            const tourContainer = document.getElementById('tourContainer');
+            tourContainer.style.display = 'none';
+            
+            const tourFrame = document.getElementById('tourFrame');
+            tourFrame.src = '';
+            
+            const tourAudio = document.getElementById('tourAudio');
+            tourAudio.pause();
+        }
+    </script>
+</body>
+</html>

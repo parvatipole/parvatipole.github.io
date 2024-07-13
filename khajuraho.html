@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khajuraho Temples Virtual Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .iframe-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+        .iframe-container audio {
+            margin-top: 20px;
+        }
+        .exit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Khajuraho Temples Virtual Tour</h1>
+    <div class="button-container">
+        <button onclick="showTour('pratapeshwar mandir')">Pratapeshwar Mandir</button>
+        <button onclick="showTour('varah mandir')">Varah Mandir</button>
+        <button onclick="showTour('laxman mandir')">Laxman Mandir</button>
+        <button onclick="showTour('chaturbhuj temple')">Chaturbhuj Temple</button>
+        <button onclick="showTour('devi jagdambi mandir')">Devi Jagdambi Mandir</button>
+        <button onclick="showTour('chitragupta mandir')">Chitragupta Mandir</button>
+        <button onclick="showTour('vishwanath mandir')">Vishwanath Mandir</button>
+    </div>
+    <div class="iframe-container" id="tourContainer">
+        <button class="exit-button" onclick="exitTour()">Exit</button>
+        <iframe id="tourFrame"></iframe>
+        <audio controls id="tourAudio">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const tourLinks = {
+            'pratapeshwar mandir': 'https://www.google.com/maps/embed?pb=!4v1720814462342!6m8!1m7!1snxwhIDJt8gcChcE4Ev6NTw!2m2!1d24.85295263920627!2d79.92255039123637!3f255.5398755992448!4f-6.162205731919357!5f0.7820865974627469',
+            'varah mandir': 'https://www.google.com/maps/embed?pb=!4v1720814579069!6m8!1m7!1sWgP2F-BZAnLQuVo872zZRg!2m2!1d24.85213941712803!2d79.92219422404838!3f88.64327124118616!4f-24.3523366546803!5f0.7820865974627469',
+            'laxman mandir': 'https://www.google.com/maps/embed?pb=!4v1720814770084!6m8!1m7!1sNoWjemR5misiH5A1YVFj9w!2m2!1d24.85318032826246!2d79.9195203759337!3f144.8393326976468!4f31.457223887798364!5f0.7820865974627469',
+            'chaturbhuj temple': 'https://www.google.com/maps/embed?pb=!4v1720814997739!6m8!1m7!1sNaS5jFCrTO7fws9LxTCpfw!2m2!1d24.8252018623661!2d79.93099512094176!3f64.1393036098577!4f2.773210296895286!5f0.7820865974627469',
+            'devi jagdambi mandir': 'https://www.google.com/maps/embed?pb=!4v1720815174623!6m8!1m7!1srMHQ8hgXWUsixw1664ck1w!2m2!1d24.85327837977578!2d79.91976992990578!3f351.0453487764383!4f9.26409994048646!5f0.7820865974627469',
+            'chitragupta mandir': 'https://www.google.com/maps/embed?pb=!4v1720815336431!6m8!1m7!1sCAoSLEFGMVFpcE85YWVYdEJ4MnNMSWxLMnVYWDBZSDdhdmdHcDdsYmRUNlFvaHA5!2m2!1d24.85435537339501!2d79.91999297096618!3f310.75517239016824!4f1.3029616945311204!5f0.4000000000000002',
+            'vishwanath mandir': 'https://www.google.com/maps/embed?pb=!4v1720815421665!6m8!1m7!1sEjkfo6SgR9tZN-OitsQ3Nw!2m2!1d24.85346076405895!2d79.92271923480894!3f130.9470087489355!4f8.608513748575533!5f0.7820865974627469'
+        };
+
+        const audioFiles = {
+            'pratapeshwar mandir': 'pratapeshwar_mandir_khajuraho.mp3',
+            'varah mandir': 'varah_mandir.mp3',
+            'laxman mandir': 'laxman_mandir_khajuraho.mp3',
+            'chaturbhuj temple': 'chaturbhuj_temple_khajuraho.mp3',
+            'devi jagdambi mandir': 'devi_jagdambi_mandir.mp3',
+            'chitragupta mandir': 'chitragupta_mandir_khajuraho.mp3',
+            'vishwanath mandir': 'vishwanath_temple_khajuraho.mp3'
+        };
+
+        function showTour(place) {
+            const tourContainer = document.getElementById('tourContainer');
+            const tourFrame = document.getElementById('tourFrame');
+            const tourAudio = document.getElementById('tourAudio');
+
+            tourFrame.src = tourLinks[place];
+            tourAudio.src = audioFiles[place];
+            tourContainer.style.display = 'flex';
+        }
+
+        function exitTour() {
+            const tourContainer = document.getElementById('tourContainer');
+            tourContainer.style.display = 'none';
+            
+            const tourFrame = document.getElementById('tourFrame');
+            tourFrame.src = '';
+            
+            const tourAudio = document.getElementById('tourAudio');
+            tourAudio.pause();
+        }
+    </script>
+</body>
+</html>

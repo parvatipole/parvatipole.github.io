@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agra Fort Virtual Tour</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .button-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .iframe-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .iframe-container iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+        }
+        .iframe-container audio {
+            margin-top: 20px;
+        }
+        .exit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #FF0000;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .exit-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>qutub minar Virtual Tour</h1>
+    <div class="button-container">
+        <button onclick="showTour('imam zamins tomb')">imam zamins tomb</button>
+        <button onclick="showTour('alai minar')">alai minar </button>
+        <button onclick="showTour('mughal mosque')">mughal mosque</button>
+        <button onclick="showTour('madarsa ')">madarsa </button>
+        <button onclick="showTour('khilji kabar')">khilji kabar</button>
+        <button onclick="showTour('iron pillar')">iron pillar</button>
+        <button onclick="showTour('Ilutmish tomb')">Ilutmish tomb</button>
+    </div>
+    <div class="iframe-container" id="tourContainer">
+        <button class="exit-button" onclick="exitTour()">Exit</button>
+        <iframe id="tourFrame"></iframe>
+        <audio controls id="tourAudio">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        const tourLinks = {
+            'imam zamins tomb': 'https://www.google.com/maps/embed?pb=!4v1720798214274!6m8!1m7!1swXXUB-bCL6e4RyG8-xpr-w!2m2!1d28.52414893429771!2d77.18588836752974!3f350.31737926581303!4f9.290314187259213!5f0.7820865974627469',
+            'alai minar': 'https://www.google.com/maps/embed?pb=!4v1720798034908!6m8!1m7!1sV7Q1WSxxbKBhdnqsV6Mtuw!2m2!1d28.5256119578723!2d77.18540913027522!3f342.1120169821678!4f17.343159550259912!5f0.7820865974627469',
+            'mughal mosque': 'https://www.google.com/maps/embed?pb=!4v1720798138974!6m8!1m7!1sJUOMzX1EVCKJ-MCb5NtgmQ!2m2!1d28.52398402973095!2d77.18445408287687!3f269.3088471052885!4f-13.974144190648786!5f0.7820865974627469',
+            'madarsa': 'https://www.google.com/maps/embed?pb=!4v1720798286288!6m8!1m7!1sgnfdE4prK4pQnx-iaDHF7A!2m2!1d28.52413848935505!2d77.18436849745143!3f33.39803766199151!4f2.271023992115701!5f0.7820865974627469',
+            'khilji kabar': 'https://www.google.com/maps/embed?pb=!4v1720798541460!6m8!1m7!1sO0WPjugao07S0-n6_6q0jQ!2m2!1d28.52391029065398!2d77.1844579560921!3f275.9243913714776!4f1.1727206562179333!5f0.7820865974627469',
+            'iron pillar': 'https://www.google.com/maps/embed?pb=!4v1720798608815!6m8!1m7!1sMWR0llsxHS5FI5ic5Dmnlg!2m2!1d28.52462750139587!2d77.18501167859523!3f339.4573613459606!4f-1.4636036051824703!5f0.7820865974627469',
+            'Ilutmish tomb': 'https://www.google.com/maps/embed?pb=!4v1720798716576!6m8!1m7!1sEmDCrvM9sRhreCGjdwWI_g!2m2!1d28.52515935137836!2d77.18458565178929!3f327.9788660921052!4f-22.529978709151464!5f0.7820865974627469'
+            
+        };
+
+        const audioFiles = {
+            'imam zamins tomb': 'imam_zamins_tomb.mp3',
+            'alai minar': 'alai_minar.mp3',
+            'mughal mosque': 'mughal_mosque.mp3',
+            'madarsa': 'khilji_kabar.mp3',
+            'khilji kabar': 'khilji_kabar.mp3',
+            'iron pillar': 'iron_pillar.mp3',
+            'Ilutmish tomb': 'Iltutmish_tomb_qutub_minar.mp3'
+        };
+
+        function showTour(place) {
+            const tourContainer = document.getElementById('tourContainer');
+            const tourFrame = document.getElementById('tourFrame');
+            const tourAudio = document.getElementById('tourAudio');
+
+            tourFrame.src = tourLinks[place];
+            tourAudio.src = audioFiles[place];
+            tourContainer.style.display = 'flex';
+        }
+
+        function exitTour() {
+            const tourContainer = document.getElementById('tourContainer');
+            tourContainer.style.display = 'none';
+            
+            const tourFrame = document.getElementById('tourFrame');
+            tourFrame.src = '';
+            
+            const tourAudio = document.getElementById('tourAudio');
+            tourAudio.pause();
+        }
+    </script>
+</body>
+</html>

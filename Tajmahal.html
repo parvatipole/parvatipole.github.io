@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Virtual Tour Tajmahal</title>
+    <style>
+      .map-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      }
+      .map-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .audio-options {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        width: 250px;
+        display: none;
+      }
+      .audio-options ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .audio-options li {
+        margin-bottom: 10px;
+      }
+      .audio-options button {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .audio-options button:hover {
+        background-color: #3e8e41;
+      }
+      .select-audio-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .select-audio-button:hover {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="map-container">
+      <iframe
+        id="street-view-iframe"
+        src="https://www.google.com/maps/embed?pb=!4v1718795756979!6m8!1m7!1sFdpXNgFOSOAAAAGuoET9Hg!2m2!1d27.17517354422566!2d78.04247249638297!3f173.41303444935912!4f-42.829408368364625!5f0.4000000000000002"
+        width="600"
+        height="450"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <audio id="audio-guide"></audio>
+    <button class="select-audio-button" onclick="showAudioOptions()">Select Audio</button>
+    <div class="audio-options">
+      <h2>Audio Guide</h2>
+      <ul>
+        <li>
+          <button data-audio="cenatoph.mp3">Taj Mahal Description</button>
+        </li>
+        <li>
+          <button data-audio="entrance_to_cenotaphs.mp3">Entrance to Cenotaphs</button>
+        </li>
+        <li>
+          <button data-audio="main_chamber.mp3">Main Chamber</button>
+        </li>
+        <li>
+          <button data-audio="surrounding walls.mp3">Surrounding Walls</button>
+        </li>
+        <li>
+          <button data-audio="terrace_garden.mp3">Terrace and Garden</button>
+        </li>
+        <li>
+          <button data-audio="top_view_of_tajmahal.mp3">Top View of Taj Mahal</button>
+        </li>
+      </ul>
+    </div>
+    <script>
+      let audioGuide = document.getElementById("audio-guide");
+      let audioOptions = document.querySelectorAll(".audio-options button");
+      let audioOptionsContainer = document.querySelector(".audio-options");
+
+      function showAudioOptions() {
+        audioOptionsContainer.style.display = "block";
+      }
+
+      audioOptions.forEach((button) => {
+        button.addEventListener("click", () => {
+          let audioFile = button.getAttribute("data-audio");
+          audioGuide.src = audioFile;
+          audioGuide.play();
+          audioOptionsContainer.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

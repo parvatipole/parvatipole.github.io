@@ -1,83 +1,110 @@
-body.rainbow-background {
-  background: linear-gradient(
-    120deg,
-    red,
-    orange,
-    yellow,
-    green,
-    blue,
-    indigo,
-    violet
-  );
-  background-size: 140% 140%;
-  animation: rainbow 5s ease infinite;
-}
-
-@keyframes rainbow {
-  0%, 100% {
-    background-position: 0% 50%;
+/* Define general styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
   }
-  50% {
-    background-position: 100% 50%;
+  
+  .rainbow-background {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
   }
-}
-
-.banner {
-  padding: 20px;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-header {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-#search-bar {
-  padding: 10px;
-  width: 300px;
-  margin-right: 10px;
-  border-radius:40px ;
-}
-
-button {
-  padding: 10px 20px;
-}
-
-.places {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.place {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.place img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-.button {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background: #333;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.button:hover {
-  background: #555;
-}
+  
+  .banner {
+    width: 100%;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  #search-bar {
+    padding: 10px;
+    width: 300px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .identify-place-section {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .identify-place-button {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 15px 32px; /* Padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Inline block element */
+    font-size: 20px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition effect */
+  }
+  
+  .identify-place-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+  
+  .places {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .place {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 300px;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .place img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .place h2 {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  .place button {
+    margin-top: 10px;
+  }
+  

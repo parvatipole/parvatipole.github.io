@@ -6,7 +6,7 @@ import google.generativeai as genai
 genai.configure(api_key='AIzaSyDpjh32y-OvQX5cBYE2BWIArHKfGh3x4yc')  # Replace with your actual Google API key
 
 def main():
-    st.title("Image Identifier Using GenAI")
+    st.title("Identify The Place With Its Description")
 
     # File uploader for image
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
